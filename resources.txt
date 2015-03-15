@@ -1,0 +1,8 @@
+Have used mostly the resources found in the course. Which include jQuery API doc, 
+Google Map API doc. Also used the recommended validators.
+Have also read some other documents:
+http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/
+After reading through the Google Maps API i couldn't figure out how to get more
+interesting mapsInfo. Once i sent arguments into service.textSearch i couldn't
+figure out how to get for example bio.name into the mapInfo, with the correct
+location.
