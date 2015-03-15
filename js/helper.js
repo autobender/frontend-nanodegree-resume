@@ -106,7 +106,8 @@ function initializeMap() {
   var locations;
 
   var mapOptions = {
-    disableDefaultUI: true
+    disableDefaultUI: true,
+    zoom: 8,
   };
 
   // This next line makes `map` a new Google Map JavaScript Object and attaches it to
@@ -170,7 +171,8 @@ function initializeMap() {
 
     // hmmmm, I wonder what this is about...
     google.maps.event.addListener(marker, 'click', function() {
-      // your code goes here!
+      var lastMap = infoWindow.open(map, marker);
+      
     });
 
     // this is where the pin actually gets added to the map.
@@ -212,10 +214,140 @@ function initializeMap() {
 
       // Actually searches the Google Maps API for location data and runs the callback
       // function with the search results after each search.
+      console.log(locations);
       service.textSearch(request, callback);
     }
   }
+// Iterate through the localizedRuleNames in ruleResults and 
+// return an array of their strings.
+function ruleList(results) {
+  var rules = [];
+  for (i in results["formattedResults"]["ruleResults"]) {
+    //console.log(i);
+    rules.push(results["formattedResults"]["ruleResults"][i].localizedRuleName);
+    //console.log(results["formattedResults"]["ruleResults"][i]["localizedRuleName"]);
+  }
+  return rules;
+}
 
+// Iterate through pageStats in the psiResults object and 
+// return the total number of bytes to load the website.
+function totalBytes(results) {
+  var totBytes = 0;
+  for (i in results["pageStats"]) {
+    //console.log(results["pageStats"][i]);
+    if(i.search("Bytes") > 0){
+      totBytes += Number(results["pageStats"][i]);
+    }
+  }
+  return totBytes;
+}
+
+// Below, you'll find a sample PS Insights JSON
+// and two console.log statements to help you test your code!
+
+psinsights = {
+ "kind": "pagespeedonline#result",
+ "id": "/speed/pagespeed",
+ "responseCode": 200,
+ "title": "PageSpeed Home",
+ "score": 90,
+ "pageStats": {
+  "numberResources": 22,
+  "numberHosts": 7,
+  "totalRequestBytes": "2761",
+  "numberStaticResources": 16,
+  "htmlResponseBytes": "91981",
+  "cssResponseBytes": "37728",
+  "imageResponseBytes": "13909",
+  "javascriptResponseBytes": "247214",
+  "otherResponseBytes": "8804",
+  "numberJsResources": 6,
+  "numberCssResources": 2
+ },
+ "formattedResults": {
+  "locale": "en_US",
+  "ruleResults": {
+    "AvoidBadRequests": {
+      "localizedRuleName": "Avoid bad requests",
+      "ruleImpact": 0.0
+    },
+    "MinifyJavaScript": {
+      "localizedRuleName": "Minify JavaScript",
+      "ruleImpact": 0.1417,
+      "urlBlocks": [
+      {
+        "header": {
+       "format": "Minifying the following JavaScript resources could reduce their size by $1 ($2% reduction).",
+       "args": [
+        {
+         "type": "BYTES",
+         "value": "1.3KiB"
+        },
+        {
+         "type": "INT_LITERAL",
+         "value": "0"
+        }
+       ]
+        },
+        "urls": [
+        {
+          "result": {
+         "format": "Minifying $1 could save $2 ($3% reduction).",
+         "args": [
+          {
+           "type": "URL",
+           "value": "http://code.google.com/js/codesite_tail.pack.04102009.js"
+          },
+          {
+           "type": "BYTES",
+           "value": "717B"
+          },
+          {
+           "type": "INT_LITERAL",
+           "value": "1"
+          }
+         ]
+        }
+       },
+       {
+        "result": {
+         "format": "Minifying $1 could save $2 ($3% reduction).",
+         "args": [
+          {
+           "type": "URL",
+           "value": "http://www.gmodules.com/ig/proxy?url\u003dhttp%3A%2F%2Fjqueryjs.googlecode.com%2Ffiles%2Fjquery-1.2.6.min.js"
+          },
+          {
+           "type": "BYTES",
+           "value": "258B"
+          },
+          {
+           "type": "INT_LITERAL",
+           "value": "0"
+          }
+         ]
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "SpriteImages": {
+    "localizedRuleName": "Combine images into CSS sprites",
+    "ruleImpact": 0.0
+   }
+  }
+ },
+ "version": {
+  "major": 1,
+  "minor": 11
+ }
+};
+
+// Try logging the outputs below to test your code!
+console.log(ruleList(psinsights));
+console.log(totalBytes(psinsights));
   // Sets the boundaries of the map based on pin locations
   window.mapBounds = new google.maps.LatLngBounds();
 
@@ -233,11 +365,11 @@ Uncomment the code below when you're ready to implement a Google Map!
 */
 
 // Calls the initializeMap() function when the page loads
-//window.addEventListener('load', initializeMap);
+window.addEventListener('load', initializeMap);
 
 // Vanilla JS way to listen for resizing of the window
 // and adjust map bounds
-//window.addEventListener('resize', function(e) {
-  // Make sure the map bounds get updated on page resize
-//  map.fitBounds(mapBounds);
-//});
+window.addEventListener('resize', function(e) {
+// Make sure the map bounds get updated on page resize
+  map.fitBounds(mapBounds);
+});
