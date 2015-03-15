@@ -85,7 +85,8 @@ function logClicks(x,y) {
 }
 
 $(document).click(function(loc) {
-  // your code goes here!
+  locs.push(loc);
+  console.log("Clicked at: " +locs[locs.length - 1].pageX + "x " + locs[locs.length - 1].pageY + "y");
 });
 
 
@@ -214,7 +215,7 @@ function initializeMap() {
 
       // Actually searches the Google Maps API for location data and runs the callback
       // function with the search results after each search.
-      console.log(locations);
+      //console.log(locations);
       service.textSearch(request, callback);
     }
   }
@@ -346,8 +347,8 @@ psinsights = {
 };
 
 // Try logging the outputs below to test your code!
-console.log(ruleList(psinsights));
-console.log(totalBytes(psinsights));
+//console.log(ruleList(psinsights));
+//console.log(totalBytes(psinsights));
   // Sets the boundaries of the map based on pin locations
   window.mapBounds = new google.maps.LatLngBounds();
 

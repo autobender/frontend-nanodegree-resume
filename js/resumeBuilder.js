@@ -21,14 +21,16 @@ var bio = {
 
 		$("#header").prepend(formattedRole);
 		$("#header").prepend(formattedName);
+		$("#header").append(formattedPic);
+		$("#header").append(formattedMessage);
+
 		var formattedContact = "";
 		for (conType in bio.contacts) {
 			formattedContact += HTMLcontactGeneric.replace("%contact%", conType).replace("%data%", bio.contacts[conType])
 		}//End of contact loop
 		$("#topContacts").append(formattedContact);
 		$("#footerContacts").append(formattedContact);
-		$("#header").append(formattedPic);
-		$("#header").append(formattedMessage);		
+	
 		if (bio.skills.length > 0) {
 			$("#header").append(HTMLskillsStart);
 			var formattedSkills = "";
@@ -128,30 +130,6 @@ var work = {
 		}//end of for loop
 	}//end of Display function
 };
-locs = [];
-$(document).click(function(loc) {
-	locs.push(loc);
-	console.log("Clicked at: " +locs[locs.length - 1].pageX + "x " + locs[locs.length - 1].pageY + "y");
-});
-function locationizer(workObj) {
-	locsFromWork = [];
-	for (job in workObj.jobs) {
-			locsFromWork.push(workObj.jobs[job].location);
-	}
-	return locsFromWork;
-}
-
-function inName() {
-	splitName = bio.name.trim().split(" ");
-	splitName[0] = splitName[0].slice(0,1).toUpperCase() + splitName[0].slice(1).toLowerCase();
-	splitName[1] = splitName[1].toUpperCase();
-	lastName = splitName[1];
-	lastName = lastName.toLocaleUpperCase()
-	lastNameUpperCase = splitName[0] + " " + lastName;
-	return splitName[0] + " " + splitName[1];
-}
-$("#main").append(internationalizeButton);
-
 var projects = {
 	"projects" : [
 		{
@@ -182,7 +160,26 @@ var projects = {
 			}//end image loop
 		}//End of for loop
 	}//End of display function
+};//end of Projects object
+function locationizer(workObj) {
+	locsFromWork = [];
+	for (job in workObj.jobs) {
+			locsFromWork.push(workObj.jobs[job].location);
+	}
+	return locsFromWork;
 }
+//function for changing bio.name to international std
+//ex. bOb Kirk -> Bob KIRK
+/*function inName() {
+	splitName = bio.name.trim().split(" ");
+	splitName[0] = splitName[0].slice(0,1).toUpperCase() + splitName[0].slice(1).toLowerCase();
+	splitName[1] = splitName[1].toUpperCase();
+	lastName = splitName[1];
+	lastName = lastName.toLocaleUpperCase()
+	lastNameUpperCase = splitName[0] + " " + lastName;
+	return splitName[0] + " " + splitName[1];
+}*/
+//$("#main").append(internationalizeButton);
 bio.display();
 projects.display();
 education.diaplay();
